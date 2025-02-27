@@ -1,0 +1,48 @@
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"error","message":"Not found"}
+{"content_length":"34","label":"Spare Spart api logs","level":"http","message":"incoming-api-request","method":"GET","response_time":3.061,"status":404,"url":"/spproductservices/api/v1/details-by-code/5"}
+{"label":"Spare Spart api logs","level":"error","message":"jwt expired"}
+{"content_length":"36","label":"Spare Spart api logs","level":"http","message":"incoming-api-request","method":"GET","response_time":13.452,"status":500,"url":"/spproductservices/api/v1/spare-part/details-by-code/5"}
+{"label":"Spare Spart api logs","level":"info","message":"Sucessful"}
+{"content_length":"987","label":"Spare Spart api logs","level":"http","message":"incoming-api-request","method":"GET","response_time":4382.682,"status":200,"url":"/spproductservices/api/v1/spare-part/details-by-code/5"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"error","message":"str.match is not a function"}
+{"content_length":"52","label":"Spare Spart api logs","level":"http","message":"incoming-api-request","method":"GET","response_time":3989.609,"status":500,"url":"/spproductservices/api/v1/spare-part/details-by-code/A00005"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"info","message":"Sucessful"}
+{"content_length":"987","label":"Spare Spart api logs","level":"http","message":"incoming-api-request","method":"GET","response_time":3370.927,"status":200,"url":"/spproductservices/api/v1/spare-part/details-by-code/A00005"}
+{"label":"Spare Spart api logs","level":"debug","message":"Spare Part Product Service: Running in development mode and listening on port http://:9010"}
+{"label":"Spare Spart api logs","level":"info","message":"Sucessful"}
+{"content_length":"987","label":"Spare Spart api logs","level":"http","message":"incoming-api-request","method":"GET","response_time":4542.975,"status":200,"url":"/spproductservices/api/v1/spare-part/details-by-code/A00005"}
+{"label":"Spare Spart api logs","level":"info","message":"Sucessful"}
+{"content_length":"987","label":"Spare Spart api logs","level":"http","message":"incoming-api-request","method":"GET","response_time":4437.623,"status":200,"url":"/spproductservices/api/v1/spare-part/details-by-code/A0005"}
+{"label":"Spare Spart api logs","level":"info","message":"Sucessful"}
+{"content_length":"985","label":"Spare Spart api logs","level":"http","message":"incoming-api-request","method":"GET","response_time":4496.832,"status":200,"url":"/spproductservices/api/v1/spare-part/details-by-code/A0006"}

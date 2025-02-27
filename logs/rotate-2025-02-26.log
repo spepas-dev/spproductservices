@@ -1,0 +1,2 @@
+{"label":"Spare Spart api logs","level":"info","message":"Sucessful"}
+{"content_length":"980","label":"Spare Spart api logs","level":"http","message":"incoming-api-request","method":"GET","response_time":3578.977,"status":200,"url":"/spproductservices/api/v1/spare-part/details-by-code/A0003"}
