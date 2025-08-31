@@ -24,6 +24,26 @@ const {
   SPARE_PART_DETAILS_BY_CODE,
 } = require("../controllers/SparePartController");
 
+
+const {
+ADD_CATEGORY
+} = require("../controllers/CategoryController");
+
+
+
+
+const {
+      ADD_SLIDER,
+      ACTIVATE_SLIDER,
+      DEACTIVATE_SLIDER,
+      ALL_SLIDERS,
+      ACTIVE_SLIDERS
+  } = require("../controllers/SliderController");
+  
+
+
+
+
 //test routes link
 router.route("/testapi").get(TestController);
 
@@ -57,4 +77,21 @@ router
   .route("/spare-part/details-by-code/:spare_part_code")
   .get(NoneUserCheck, VALIDATE_TOKEN, SPARE_PART_DETAILS_BY_CODE);
 
+
+
+  router
+  .route("/category/add")
+  .post(NoneUserCheck, VALIDATE_TOKEN, ADD_CATEGORY);
+
+
+
+
+
+  router.route("/slider/add").post(NoneUserCheck, VALIDATE_TOKEN, ADD_SLIDER);
+  router.route("/slider/activate").post(NoneUserCheck, VALIDATE_TOKEN, ACTIVATE_SLIDER);
+  router.route("/slider/deactivate").post(NoneUserCheck, VALIDATE_TOKEN, DEACTIVATE_SLIDER);
+  router.route("/slider/all").get(NoneUserCheck, VALIDATE_TOKEN, ALL_SLIDERS);
+  router.route("/slider/active").get(NoneUserCheck, VALIDATE_TOKEN, ACTIVE_SLIDERS);
+
+  
 module.exports = router;
