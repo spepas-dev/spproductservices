@@ -197,6 +197,7 @@ exports.SPARE_PART_DETAILS_BY_CODE = asynHandler(async (req, res, next) => {
     status: RESPONSE_CODES.SUCCESS,
     message: "Sucessful",
     data: newUserUpdate.data,
+    meta: newUserUpdate.meta,
   };
 
   return UtilityHelper.sendResponse(res, 200, resp.message, resp);

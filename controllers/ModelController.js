@@ -100,6 +100,7 @@ exports.ALL_MODELS = asynHandler(async (req, res, next) => {
     status: RESPONSE_CODES.SUCCESS,
     message: "Sucessful",
     data: newUserUpdate.data,
+    meta: newUserUpdate.meta,
   };
 
   return UtilityHelper.sendResponse(res, 200, resp.message, resp);
