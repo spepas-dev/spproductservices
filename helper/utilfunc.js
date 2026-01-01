@@ -1,105 +1,77 @@
 const { logger } = require("../logs/winston");
-const otpGenerator = require('otp-generator');
-const {RESPONSE_CODES } = require("../helper/vars");
-const {createHash} = require('crypto');
-const crypto = require('crypto');
-const ldap = require('ldapjs');
-const axios = require('axios');
-const jwt = require('jsonwebtoken');
+const otpGenerator = require("otp-generator");
+const { RESPONSE_CODES } = require("../helper/vars");
+const { createHash } = require("crypto");
+const crypto = require("crypto");
+const ldap = require("ldapjs");
+const axios = require("axios");
+const jwt = require("jsonwebtoken");
 
 let ussd = {};
 
+ussd.sha256Encrypt = (textPhrase) => {
+  //console.log("raw text here: "+ textPhrase)
+  const hash = createHash("sha256");
+  for (let i = 0; i < textPhrase.length; i++) {
+    const rawText = textPhrase[i].trim(); // remove leading/trailing whitespace
+    if (rawText === "") continue; // skip empty lines
+    hash.write(rawText); // write a single line to the buffer
+  }
 
+  return hash.digest("base64");
+};
 
-    ussd.sha256Encrypt = (textPhrase) => {
+ussd.generateOTP = (length) => {
+  const OTP = otpGenerator.generate(length);
+  console.log("otp here: " + OTP);
 
-      //console.log("raw text here: "+ textPhrase)
-        const hash = createHash('sha256');
-        for (let i = 0; i < textPhrase.length; i++) {
-          const rawText = textPhrase[i].trim(); // remove leading/trailing whitespace
-          if (rawText === '') continue; // skip empty lines
-          hash.write(rawText); // write a single line to the buffer
-        }
-      
-        return hash.digest('base64'); 
-     };
+  if (length == 4) {
+    return "1234";
+  } else {
+    return "123456";
+  }
 
+  // return OTP;
+};
 
+ussd.formatPhone = (phone) => {
+  console.log("++++++++= phone: " + phone);
+  if (phone.startsWith("0") && phone.length == 10) {
+    phone = phone.substring(1);
+    phone = "233" + phone;
+  } else if (!phone.startsWith("0") && phone.length == 9) {
+    phone = phone.substring(2);
+    phone = "233" + phone;
+  } else if (phone.startsWith("+233")) {
+    phone = phone.substring(1);
+  } else if (phone.startsWith("2330") && phone.length == 13) {
+    phone = phone.substring(4);
+    phone = "233" + phone;
+  } else if (phone.startsWith("00233") && phone.length == 14) {
+    phone = phone.substring(5);
+    phone = "233" + phone;
+  } else if (phone.startsWith("0233") && phone.length == 13) {
+    phone = phone.substring(4);
+    phone = "233" + phone;
+  } else if (phone.startsWith("+")) {
+    phone = phone.substring(1);
+  }
 
-     ussd.generateOTP = (length) => {
-      const OTP = otpGenerator.generate(length);
-      console.log('otp here: ' + OTP);
+  phone = phone.replace(/ /g, "");
+  return phone;
+};
 
+ussd.formateUser = (userReg) => {
+  delete userReg["id"];
+  delete userReg["user_id"];
+  delete userReg["password"];
+  delete userReg["cloudinary_data"];
 
+  return userReg;
+};
 
-      if(length == 4)
-      {
-         return '1234'
-      }else{
-         return '123456'
-      }
-
-     // return OTP;
-    };
-
-
-
-
-
-     ussd.formatPhone = (phone) => {
-
-      console.log("++++++++= phone: "+ phone)
-      if(phone.startsWith('0') && phone.length == 10)
-      {
-        phone = phone.substring(1);
-        phone =  "233" + phone;
-      }else if(!phone.startsWith('0') && phone.length == 9)
-      {
-         phone = phone.substring(2);
-         phone =  "233" + phone;
-      }else if(phone.startsWith('+233'))
-      {
-         phone = phone.substring(1);
-      }else  if(phone.startsWith('2330') && phone.length == 13)
-      {
-        phone = phone.substring(4);
-        phone =  "233" + phone;
-      }else  if(phone.startsWith('00233') && phone.length == 14)
-      {
-        phone = phone.substring(5);
-        phone =  "233" + phone;
-      }else  if(phone.startsWith('0233') && phone.length == 13)
-      {
-        phone = phone.substring(4);
-        phone =  "233" + phone;
-      }else if(phone.startsWith('+'))
-      {
-         phone = phone.substring(1);
-      }
-     
-      phone = phone.replace(/ /g, '');
-        return phone; 
-     };
-
-
-
-
-
-    ussd.formateUser = (userReg) => {
-
-      delete userReg["id"];
-      delete userReg["user_id"];
-      delete userReg["password"];
-      delete userReg["cloudinary_data"];
-       
-        return userReg; 
-     };
-
-
-     ussd.authenticate  = async (username, password) =>{
-      
-
-      /*
+ussd.authenticate = async (username, password) => {
+  /*
       return new Promise((resolve, reject) => {
         // LDAP server details
         const domain = process.env.LDAPDOMAIN;
@@ -171,120 +143,95 @@ let ussd = {};
     });
 */
 
-
-
-
-
-
-      return new Promise((resolve, reject) => {
-        // Create the LDAP client with a timeout configuration
-        const client = ldap.createClient({
-            url: process.env.LDAPURL, // Your LDAP server URL
-            timeout: 5000,                // 5 seconds timeout for operations
-            connectTimeout: 10000         // 10 seconds timeout for connecting
-        });
-
-        // Handle client connection errors and timeouts
-        client.on('error', (err) => {
-            console.error('LDAP client error:', err.message);
-            reject('Failed to connect to LDAP server');
-        });
-
-        client.on('timeout', () => {
-            console.error('LDAP client connection timed out');
-            reject('LDAP server connection timed out');
-        });
-
-        // Define the DN (Distinguished Name) for the user
-        //const dn = `cn=${username},dc=${process.env.LDAPDOMAIN}`; // Adjust this format as per your LDAP structure
-
-        console.log("client here")
-        console.log(dn);
-        const dn = `CN=${username},CN=Users,DC=${process.env.LDAPDOMAIN},DC=com`
-        // Perform a simple bind (authentication)
-        client.bind(dn, password, (err) => {
-            if (err) {
-                console.error('LDAP bind failed:', err.message);
-                reject('Authentication failed');
-            } else {
-                console.log('LDAP bind successful');
-                resolve('Authentication successful');
-            }
-
-            // Unbind the client after authentication to free up resources
-            client.unbind((unbindErr) => {
-                if (unbindErr) {
-                    console.error('Failed to unbind client:', unbindErr.message);
-                }
-            });
-        });
+  return new Promise((resolve, reject) => {
+    // Create the LDAP client with a timeout configuration
+    const client = ldap.createClient({
+      url: process.env.LDAPURL, // Your LDAP server URL
+      timeout: 5000, // 5 seconds timeout for operations
+      connectTimeout: 10000, // 10 seconds timeout for connecting
     });
 
-  
-  }
+    // Handle client connection errors and timeouts
+    client.on("error", (err) => {
+      console.error("LDAP client error:", err.message);
+      reject("Failed to connect to LDAP server");
+    });
 
+    client.on("timeout", () => {
+      console.error("LDAP client connection timed out");
+      reject("LDAP server connection timed out");
+    });
 
+    // Define the DN (Distinguished Name) for the user
+    //const dn = `cn=${username},dc=${process.env.LDAPDOMAIN}`; // Adjust this format as per your LDAP structure
 
+    console.log("client here");
+    console.log(dn);
+    const dn = `CN=${username},CN=Users,DC=${process.env.LDAPDOMAIN},DC=com`;
+    // Perform a simple bind (authentication)
+    client.bind(dn, password, (err) => {
+      if (err) {
+        console.error("LDAP bind failed:", err.message);
+        reject("Authentication failed");
+      } else {
+        console.log("LDAP bind successful");
+        resolve("Authentication successful");
+      }
 
+      // Unbind the client after authentication to free up resources
+      client.unbind((unbindErr) => {
+        if (unbindErr) {
+          console.error("Failed to unbind client:", unbindErr.message);
+        }
+      });
+    });
+  });
+};
 
-
-  ussd.AESEncrypt = (privateString, userkey) => {
-
-    const GCM_IV_LENGTH = 12; // 96-bit IV
+ussd.AESEncrypt = (privateString, userkey) => {
+  const GCM_IV_LENGTH = 12; // 96-bit IV
   const GCM_TAG_LENGTH = 16; // 128-bit authentication tag
 
   // Use your 16-byte key (AES-128)
-  const key = Buffer.from('KPr42187Bar22999', 'utf-8'); // 16-byte key (128 bits)
+  const key = Buffer.from("KPr42187Bar22999", "utf-8"); // 16-byte key (128 bits)
   const iv = crypto.randomBytes(GCM_IV_LENGTH); // Generate IV
-  
-  const cipher = crypto.createCipheriv('aes-128-gcm', key, iv, { authTagLength: GCM_TAG_LENGTH });
-  
-  let encrypted = cipher.update(privateString, 'utf8');
+
+  const cipher = crypto.createCipheriv("aes-128-gcm", key, iv, {
+    authTagLength: GCM_TAG_LENGTH,
+  });
+
+  let encrypted = cipher.update(privateString, "utf8");
   encrypted = Buffer.concat([encrypted, cipher.final()]);
-  
+
   const tag = cipher.getAuthTag(); // Get the authentication tag
-  
+
   // Combine IV, encrypted message, and authentication tag into one buffer
   const result = Buffer.concat([iv, encrypted, tag]);
 
   // Convert to Base64 for readability
-  return result.toString('base64');
-   };
-
-
-
-
-
-
-
-
-ussd.makeHttpRequest = async (method, url, data = null) => {
-    
-    try {
-        const options = {
-          method: method.toUpperCase(),
-          url,
-          ...(method.toUpperCase() === 'POST' && { data }),
-        };
-    
-        const response = await axios(options);
-        return response.data;
-      } catch (error) {
-        console.error(`Error in ${method} request to ${url}:`, error.message);
-        throw error; // Propagate error for further handling
-      }
-
-
+  return result.toString("base64");
 };
 
+ussd.makeHttpRequest = async (method, url, data = null) => {
+  try {
+    const options = {
+      method: method.toUpperCase(),
+      url,
+      ...(method.toUpperCase() === "POST" && { data }),
+    };
 
-
+    const response = await axios(options);
+    return response.data;
+  } catch (error) {
+    console.error(`Error in ${method} request to ${url}:`, error.message);
+    throw error; // Propagate error for further handling
+  }
+};
 
 ussd.extractNumber = (str) => {
   const match = str.match(/\d+/); // Extract digits using regex
   return match ? parseInt(match[0]) : null; // Convert to integer
 };
-
 
 /*
 
@@ -295,10 +242,8 @@ function extractNumber(str) {
 
 */
 
-
-ussd.sendResponse = (res, code,message, data) => {
-
-    /*
+ussd.sendResponse = (res, code, message, data) => {
+  /*
     if(session)
     {
      //there is a session update last update time of session
@@ -315,47 +260,34 @@ sessionModel.addLog(log);
 }
 */
 
-   data?.status == RESPONSE_CODES.FAILED ? logger.error(message) : logger.info(message)
-   res.status(code).json(data)
+  data?.status == RESPONSE_CODES.FAILED
+    ? logger.error(message)
+    : logger.info(message);
+  res.status(code).json(data);
 };
 
-
-
-
-
 ussd.verifyTokenRefresh = (token) => {
-
   try {
     if (!token) {
-        throw new Error('No token provided.');
+      throw new Error("No token provided.");
     }
     const decoded = jwt.verify(token, process.env.JWT_TOKEN_REFRESH); // Verifies the token
     return decoded; // Returns the decoded token payload
-} catch (error) {
-    throw new Error(error.message || 'Invalid or expired token.');
-}
-
-
+  } catch (error) {
+    throw new Error(error.message || "Invalid or expired token.");
+  }
 };
 
 ussd.verifyToken = (token) => {
-
   try {
     if (!token) {
-        throw new Error('No token provided.');
+      throw new Error("No token provided.");
     }
     const decoded = jwt.verify(token, process.env.JWT_TOKEN); // Verifies the token
     return decoded; // Returns the decoded token payload
-} catch (error) {
-    throw new Error(error.message || 'Invalid or expired token.');
-}
-
-
+  } catch (error) {
+    throw new Error(error.message || "Invalid or expired token.");
+  }
 };
 
-
-
-
-
-    
-module.exports = ussd
+module.exports = ussd;

@@ -102,8 +102,41 @@ exports.UPLOAD_IMAGE = asynHandler(async (req, res, next) => {
 
 exports.ALL_SPARE_PART = asynHandler(async (req, res, next) => {
   let { user } = req;
+  let { page, limit, search, startDate, endDate } = req.query;
 
-  var updateURL = process.env.DB_BASE_URL + "product/all-spare-parts";
+  if (!page) {
+    page = 1;
+  }
+
+  if (!limit) {
+    limit = 10;
+  }
+
+  if (!search) {
+    search = "";
+  }
+
+  if (!startDate) {
+    startDate = "";
+  }
+
+  if (!endDate) {
+    endDate = "";
+  }
+
+  var updateURL =
+    process.env.DB_BASE_URL +
+    "product/all-spare-parts" +
+    "?page=" +
+    page +
+    "&limit=" +
+    limit +
+    "&search=" +
+    search +
+    "&startDate=" +
+    startDate +
+    "&endDate=" +
+    endDate;
 
   let newUserUpdate = await UtilityHelper.makeHttpRequest("GET", updateURL);
 
